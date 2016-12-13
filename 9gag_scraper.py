@@ -25,6 +25,7 @@ ui = raw_input("Save images? (y/n) ")
 if ui == 'y' or ui == "Y":
 	from PIL import Image
 	from StringIO import StringIO
+	from string import maketrans
 	print "Saving Images...."
 	dirloc = raw_input("Enter the directory to save images in: ")
 	#saving images
@@ -37,18 +38,18 @@ if ui == 'y' or ui == "Y":
 	i = 0
 	j = 0
 	s = []
+	intab = "\/:*?\"<>|"
+	outtab = "         "
+	trantab = maketrans(intab,outtab)
+
 	for i in range(0,len(imgalts)):
-		s = list(imgalts[i])
-		for j in range(0,len(s)):
-			if s[j] == '\/' or s[j] == '\\' or s[j] == ":" or s[j] == "*" or s[j] == "?" or s[j] == '"' or s[j] == '<' or s[j] == '>' or s[j] == "'":
-				s[j] = ' '
-		imgalts2.append("".join(s))	
-		
+		imgalts2.append(imgalts[i].translate(trantab))
+
 	
 	for i in range(0,len(imgurls)):
 		r = requests.get(imgurls[i])
 		j = Image.open(StringIO(r.content))
-		j.save(dirloc+"/"+imgalts2[i],"jpeg")
+		j.save(dirloc+"/"+imgalts2[i]+".jpeg")
 	
 	print "Images saved."
 else:
