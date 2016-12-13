@@ -48,7 +48,7 @@ if ui == 'y' or ui == "Y":
 	for i in range(0,len(imgurls)):
 		r = requests.get(imgurls[i])
 		j = Image.open(StringIO(r.content))
-		j.save(dirloc+"/"+imgalts2[i]+"jpeg")
+		j.save(dirloc+"/"+imgalts2[i]+".jpeg")
 	
 	print "Images saved."
 else:
