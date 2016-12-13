@@ -11,15 +11,45 @@ soup = BeautifulSoup(s,'html.parser')
 imgtags = soup.find_all("img",{"class":"badge-item-img"})
 
 #scraping image urls
-imgurls = []
-for i in range(0,len(imgtags)):
-	imgurls.append(imgtags[i]['src'])
-
-print imgurls
-
 #scraping alt tags
+imgurls = []
 imgalts = []
 for i in range(0,len(imgtags)):
-	imgalts.append(imgtags[i]['alt'])
+	imgurls.append(str(imgtags[i]['src']))
+	imgalts.append(str(imgtags[i]['alt']))
 
-print imgalts
+#print imgurls
+#print imgalts
+
+ui = raw_input("Save images? (y/n) ")
+if ui == 'y' or ui == "Y":
+	from PIL import Image
+	from StringIO import StringIO
+	print "Saving Images...."
+	dirloc = raw_input("Enter the directory to save images in: ")
+	#saving images
+	#the problem with saving images 
+	#and using imgalts for img names
+	#is that we can't have \ / : * ? " < > 
+	#in the name.
+	#we need to modify imgalts accordingly.
+	imgalts2=[]
+	i = 0
+	j = 0
+	s = []
+	for i in range(0,len(imgalts)):
+		s = list(imgalts[i])
+		for j in range(0,len(s)):
+			if s[j] == '\/' or s[j] == '\\' or s[j] == ":" or s[j] == "*" or s[j] == "?" or s[j] == '"' or s[j] == '<' or s[j] == '>' or s[j] == "'":
+				s[j] = ' '
+		imgalts2.append("".join(s))	
+		
+	
+	for i in range(0,len(imgurls)):
+		r = requests.get(imgurls[i])
+		j = Image.open(StringIO(r.content))
+		j.save(dirloc+"/"+imgalts2[i],"jpeg")
+	
+	print "Images saved."
+else:
+	print "Images not saved."
