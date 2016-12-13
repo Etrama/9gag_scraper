@@ -99,3 +99,4 @@ for i in range(0,len(r)):
 	img = Image.open(StringIO(imageact))
 	img.show()
 	
+
