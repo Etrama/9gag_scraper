@@ -50,11 +50,16 @@ if ui == 'y' or ui == "Y":
     for i in range(0,count):
         imgalts2.append(imgalts[i].translate(trantab))
 
-    
+    import progressbar
+    widgets = [progressbar.Bar('=','[',']'),' ',progressbar.Percentage()]
+    bar = progressbar.ProgressBar(widgets = widgets)
+    bar.start()
+    print("Image download progress: ")
     for i in range(0,count):
         r = requests.get(imgurls[i])
         j = Image.open(StringIO(r.content))
         j.save(dirloc+"/"+imgalts2[i]+".jpeg")
+        bar.update(10*(i+1))
     
     print "Images saved."
 else:
@@ -89,7 +94,7 @@ if (ui == 'y' or ui == 'Y') and (ui2 =='y' or ui2 == 'Y'):
 
     for cols in range(2):
         for rows in range(5):
-            print(i,x,y)
+            #print(i,x,y)
             new_im.paste(resizedims[i],(x,y))
             i = i + 1
             y = y + min(heights)
